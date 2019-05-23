@@ -203,7 +203,7 @@ Resources:
               Configuration:
                   StackName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "serverless-stack" ] ]
                   ActionMode: CHANGE_SET_REPLACE
-                  RoleArn: "arn:aws:iam::656664007277:role/rl_CloudFormation"
+                  RoleArn: !Ref CloudformationRole
                   ChangeSetName: pipeline-changeset
                   Capabilities: CAPABILITY_NAMED_IAM
                   TemplatePath: 'github-output::packaged.yml'
