@@ -133,7 +133,7 @@ Resources:
               Configuration:
                   Owner: jimmyramia
                   Repo: testrepo
-                  PollForSourceChanges: false
+                  PollForSourceChanges: true
                   Branch: master
                   OAuthToken: "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:656664007277:secret:GithubOauth-3L32Eg:SecretString:github_oauth}}"
               OutputArtifacts:
