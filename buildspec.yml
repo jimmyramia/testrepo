@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       - echo "[+] Running tests..."
-      - python3 test_lambda_function.py
+      - python test_lambda_function.py
   install:
     commands:
       - aws cloudformation package --template-file template.yml --s3-bucket mysandbox-ramiaj-lambda-bucket --output-template-file packaged.yml
