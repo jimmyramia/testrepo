@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  MessageProcessor:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      CodeUri: .
+      Runtime: python3.6
+      Handler: lambda_function.lambda_handler
+      Events:
+        PostMessage:
+          Type: Api
+          Properties:
+            Path: /
+            Method: post
+        ShowMessage:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get

@@ -1,0 +1,215 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CI/CD Workflow for lambda'
+
+Parameters:
+  UserName:
+    Description: User who created the stack
+    Type: String
+  EnvironmentName:
+    Description: Name of environment like sandbox
+    Type: String
+  EmailAddress:
+    Description: Email Address
+    Type: String
+Resources:
+  ArtifactStoreBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicReadWrite
+      BucketName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "lambda-bucket" ] ]
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "lambda-sns" ] ]
+      Subscription:
+        - Endpoint: !Ref EmailAddress
+          Protocol: "email"
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [codebuild.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: CodeBuildAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                - 'logs:*'
+                - 's3:Get*'
+                - 's3:List*'
+                Effect: Allow
+                Resource: '*'
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [codepipeline.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "lambda-policy" ] ]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                - 'codebuild:BatchGetBuilds'
+                - 'codebuild:StartBuild'
+                - 'cloudformation:CreateStack'
+                - 'cloudformation:DeleteStack'
+                - 'cloudformation:DescribeStacks'
+                - 'cloudformation:UpdateStack'
+                - 'cloudformation:CreateChangeSet'
+                - 'cloudformation:DeleteChangeSet'
+                - 'cloudformation:DescribeChangeSet'
+                - 'cloudformation:ExecuteChangeSet'
+                - 'cloudformation:SetStackPolicy'
+                - 'cloudformation:ValidateTemplate'
+                - 's3:GetObject'
+                - 's3:GetObjectVersion'
+                - 's3:GetBucketVersioning'
+                - 's3:PutObject'
+                - 'iam:PassRole'
+                Effect: Allow
+                Resource: '*'
+
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "CodeBuildLambda" ] ]
+      Description: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "CodeBuildLambdaDesc" ] ]
+      Source:
+        Type: GITHUB
+        Location: https://github.com/jimmyramia/testrepo.git
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: 'aws/codebuild/python:3.5.2'
+      Artifacts:
+        Type:  S3
+        Location: !Ref ArtifactStoreBucket
+        Packaging: ZIP
+        Name: PythonOutputArtifact.zip
+      BadgeEnabled: true
+      ServiceRole: !Ref CodeBuildRole
+
+  CodePipelinePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    DependsOn:
+      - ArtifactStoreBucket
+      - CodeBuildProject
+    Properties:
+      Name: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "LambdaPipeline" ] ]
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactStoreBucket
+      RestartExecutionOnUpdate: false
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: CheckoutSource
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: 1
+              Configuration:
+                  Owner: jimmyramia
+                  Repo: testrepo
+                  PollForSourceChanges: false
+                  Branch: master
+                  OAuthToken: {{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:656664007277:secret:GithubOauth-3L32Eg:SecretString:github_oauth}}
+              OutputArtifacts:
+                - Name: 'github-source'
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: "1"
+              Configuration:
+                  ProjectName: !Ref CodeBuildProject
+              InputArtifacts:
+                  - Name: 'github-source'
+              OutputArtifacts:
+                  - Name: 'github-output'
+              RunOrder: 1
+        - Name: MyApprovalStage
+          Actions:
+            - Name: MyApprovalAction
+              ActionTypeId:
+                Category: Approval
+                Owner: AWS
+                Version: '1'
+                Provider: Manual
+              InputArtifacts: []
+              OutputArtifacts: []
+              Configuration:
+                NotificationArn: !Ref MySNSTopic
+                CustomData: Please approve the app for deployment
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: create-changeset
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: "1"
+                Provider: CloudFormation
+              InputArtifacts:
+                  - Name: 'github-output'
+              OutputArtifacts: []
+              Configuration:
+                  StackName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "serverless-stack" ] ]
+                  ActionMode: CHANGE_SET_REPLACE
+                  RoleArn: "arn:aws:iam::656664007277:role/rl_CloudFormation"
+                  ChangeSetName: pipeline-changeset
+                  Capabilities: CAPABILITY_NAMED_IAM
+                  TemplatePath: 'github-output::packaged.yaml'
+              RunOrder: 1
+            - Name: execute-changeset
+              InputArtifacts: []
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: "1"
+                Provider: CloudFormation
+              OutputArtifacts: []
+              Configuration:
+                StackName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "serverless-stack" ] ]
+                ActionMode: CHANGE_SET_EXECUTE
+                ChangeSetName: pipeline-changeset
+              RunOrder: 2
+Outputs:
+  CodeBuildProjectId:
+    Description: CodeBuild Project ID
+    Value: !Ref CodeBuildProject
+  CodeBuildProjectArn:
+    Description: CodeBuild Project ARN
+    Value: !GetAtt CodeBuildProject.Arn
+  CodePipelinePipelineId:
+    Description: CodePipeline Pipeline ID
+    Value: !Ref CodePipelinePipeline
+  CodePipelinePipelineVersion:
+    Description: CodePipeline Pipeline Version
+    Value: !GetAtt CodePipelinePipeline.Version

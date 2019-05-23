@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  EnvironmentName:
+    Description: Which environment this is running from
+    Type: String
+  UserName:
+    Description: Creator of this template
+    Type: String
+Resources:
+  ArtifactStoreBucket:
+    Properties:
+      AccessControl: PublicReadWrite
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+      BucketName:
+        Fn::Join:
+        - '-'
+        - - Ref: EnvironmentName
+          - Ref: UserName
+          - lambdabucket
+    Type: AWS::S3::Bucket
+  MessageProcessor:
+    Properties:
+      CodeUri: s3://mysandbox-ramiaj-lambdabucket/lambda_function
+      Events:
+        PostMessage:
+          Properties:
+            Method: post
+            Path: /
+          Type: Api
+        ShowMessage:
+          Properties:
+            Method: get
+            Path: /
+          Type: Api
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.6
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
