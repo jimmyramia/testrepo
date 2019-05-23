@@ -92,6 +92,7 @@ Resources:
                 - 'cloudformation:ExecuteChangeSet'
                 - 'cloudformation:SetStackPolicy'
                 - 'cloudformation:ValidateTemplate'
+                - 'codepipeline:GetPipeline'
                 - 's3:GetObject'
                 - 's3:GetObjectVersion'
                 - 's3:GetBucketVersioning'
