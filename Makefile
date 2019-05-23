@@ -15,3 +15,6 @@ delete:
 	python3 remove_bucket_contents.py $(BUCKET)
 	aws cloudformation delete-stack --stack-name $(STACK)
 	aws cloudformation delete-stack --stack-name $(LAMBDA_STACK)
+
+delete_main_stack_only:
+	aws cloudformation delete-stack --stack-name $(STACK)
