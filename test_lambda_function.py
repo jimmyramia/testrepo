@@ -8,7 +8,7 @@ class MyTestCase(unittest.TestCase):
         json_string = json.dumps(response)
         body = json.loads(json_string)['body']
         message = json.loads(body)['message']
-        self.assertEqual(message, 'Automation For The Peoples')
+        self.assertEqual(message, 'Automation For The People')
 
 
 if __name__ == '__main__':
