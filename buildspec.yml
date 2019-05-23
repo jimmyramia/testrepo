@@ -6,7 +6,7 @@ phases:
       - python test_lambda_function.py
   install:
     commands:
-      -	aws cloudformation update-stack --stack-name restapi-workflow-stack --template-body lambda_workflow.yml --parameters params.json --tags tags.json --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
+      # -	aws cloudformation update-stack --stack-name restapi-workflow-stack --template-body lambda_workflow.yml --parameters params.json --tags tags.json --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND
       # - aws cloudformation deploy --stack-name restapi-workflow-stack --template lambda_workflow.yml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM
       - aws cloudformation package --template-file template.yml --s3-bucket mysandbox-ramiaj-lambda-bucket --output-template-file packaged.yml
 artifacts:
