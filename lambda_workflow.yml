@@ -82,6 +82,7 @@ Resources:
                 - 'iam:PassRole'
                 - 'iam:GetRole'
                 - 'iam:PutRolePolicy'
+                - 'iam:CreateRole'
                 Effect: Allow
                 Resource: '*'
 

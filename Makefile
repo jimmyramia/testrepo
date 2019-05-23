@@ -1,4 +1,5 @@
 STACK:=restapi-workflow-stack
+LAMBDA_STACK:=mysandbox-ramiaj-serverless-stack
 TEMPLATE:=lambda_workflow.yml
 PARAMETERS:=params.json
 TAGS:=tags.json
@@ -13,3 +14,4 @@ update:
 delete:
 	python3 remove_bucket_contents.py $(BUCKET)
 	aws cloudformation delete-stack --stack-name $(STACK)
+	aws cloudformation delete-stack --stack-name $(LAMBDA_STACK)
