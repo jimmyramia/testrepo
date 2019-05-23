@@ -181,7 +181,7 @@ Resources:
                   RoleArn: "arn:aws:iam::656664007277:role/rl_CloudFormation"
                   ChangeSetName: pipeline-changeset
                   Capabilities: CAPABILITY_NAMED_IAM
-                  TemplatePath: 'github-output::packaged.yaml'
+                  TemplatePath: 'github-output::packaged.yml'
               RunOrder: 1
             - Name: execute-changeset
               InputArtifacts: []
