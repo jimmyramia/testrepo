@@ -6,8 +6,8 @@ phases:
       - python3 test_lambda_function.py
   install:
     commands:
-      - aws cloudformation package --template-file template.yml --s3-bucket ramiaj-test --output-template-file packaged.yml
+      - aws cloudformation package --template-file template.yml --s3-bucket mysandbox-ramiaj-lambda-bucket --output-template-file packaged.yml
 artifacts:
   files:
-    - template.yaml
-    - packaged.yaml
+    - template.yml
+    - packaged.yml

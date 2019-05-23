@@ -135,7 +135,7 @@ Resources:
                   Repo: testrepo
                   PollForSourceChanges: false
                   Branch: master
-                  OAuthToken: {{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:656664007277:secret:GithubOauth-3L32Eg:SecretString:github_oauth}}
+                  OAuthToken: "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:656664007277:secret:GithubOauth-3L32Eg:SecretString:github_oauth}}"
               OutputArtifacts:
                 - Name: 'github-source'
               RunOrder: 1
