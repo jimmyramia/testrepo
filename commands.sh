@@ -14,5 +14,6 @@ aws s3 mb s3://mysandbox-ramiaj-lambdabucket
 
 aws cloudformation create-stack --stack-name restapi-workflow-stack --template-body file://./lambda_workflow.yml --parameters file://./params.json --tags file://./tags.json --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM
 aws cloudformation delete-stack --stack-name restapi-workflow-stack
+aws cloudformation update-stack --stack-name restapi-workflow-stack --template-body file://./lambda_workflow.yml --parameters file://./params.json --tags file://./tags.json --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM
 
 python3 remove_bucket_contents.py mysandbox-ramiaj-lambda-bucket
