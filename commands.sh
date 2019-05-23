@@ -10,7 +10,7 @@ codebuild:
 
 aws cloudformation package --template-file template.yml --s3-bucket mysandbox-ramiaj-lambdabucket --output-template-file packaged.yml
 
-aws s3 mb s3://mysandbox-ramiaj-lambdabucket
+aws s3 mb s3://mysandbox-ramiaj-lambda-bucket
 
 aws cloudformation create-stack --stack-name restapi-workflow-stack --template-body file://./lambda_workflow.yml --parameters file://./params.json --tags file://./tags.json --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM
 aws cloudformation delete-stack --stack-name restapi-workflow-stack

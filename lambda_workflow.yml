@@ -59,6 +59,7 @@ Resources:
                 - 'cloudformation:ExecuteChangeSet'
                 - 'cloudformation:SetStackPolicy'
                 - 'cloudformation:ValidateTemplate'
+                - 'cloudformation:GetTemplateSummary'
                 Effect: Allow
                 Resource: '*'
 
