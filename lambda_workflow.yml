@@ -57,6 +57,30 @@ Resources:
                 Effect: Allow
                 Resource: '*'
 
+  CloudformationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: ['sts:AssumeRole']
+          Effect: Allow
+          Principal:
+            Service: [cloudformation.amazonaws.com]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: !Join [ "-", [ !Ref EnvironmentName, !Ref UserName, "lambda-cloudformation" ] ]
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                - 'cloudformation:*'
+                - 'iam:*'
+                - 'lambda:*'
+                - 'apigateway:*'
+                Effect: Allow
+                Resource: '*'
+
   CodePipelineRole:
     Type: AWS::IAM::Role
     Properties:
