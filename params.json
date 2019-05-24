@@ -10,5 +10,25 @@
   {
     "ParameterKey": "EmailAddress",
     "ParameterValue": "jimmyramia@gmail.com"
-  }
+  },
+  {
+    "ParameterKey": "GitHubSourceRepo",
+    "ParameterValue": "https://github.com/jimmyramia/testrepo.git"
+  },
+  {
+    "ParameterKey": "GitHubUserName",
+    "ParameterValue": "jimmyramia"
+  },
+  {
+    "ParameterKey": "RepoName",
+    "ParameterValue": "testrepo"
+  },
+  {
+    "ParameterKey": "OAuthTokenArn",
+    "ParameterValue":"arn:aws:secretsmanager:us-east-1:656664007277:secret:GithubOauth-3L32Eg"
+  },
+  {
+    "ParameterKey": "OAuthSecretKeyName",
+    "ParameterValue": "github_oauth"
+  },
 ]

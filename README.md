@@ -2,8 +2,8 @@
 
 This mini-project is an application that exposes a Rest Endpoint which returns a JSON payload displaying a generic message and current time. It includes source code, infrastructure (IaC) code and unit tests.  Push your code to the master branch of this repo and it will trigger the build, test, manual approval, and deployment of your endpoint.  After successful deployment, the endpoint is accessible via the API gateway Invoke URL.  You can perform 2 actions, a GET on the URL which will display a generic message or a POST which returns a response echoing the message you posted in the body of your POST request.  
 
-The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is an all AWS solution except that GitHub was used instead of CodeCommit.  The AWS managed services used include:
-* **Lambda** to process the requests made via **API Gateway**
+The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is a mostly AWS solution except that GitHub was used instead of CodeCommit.  The AWS managed services include:
+* **Lambda** to process the requests events via **API Gateway**
 * **CodePipeline** to manage getting the code through all the steps and stages on its way to deployment (including webhook)
 * **Secrets Manager** to manage the GitHub secret used in the webhook (and referenced in the CloudFormation template)
 * **CodeBuild** to run the unit tests and package the Lambda in an **S3** bucket
@@ -12,11 +12,25 @@ The source code was developed with Python and the IaC was defined in Cloudformat
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions guide you through the prerequisites steps and the recommended workflow for getting your endpoint up and running on AWS.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+* Install SAM Local - https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/
+
+* cd to the directory where requirements.txt is located, activate your virtualenv, and run:
+```pip install -r requirements.txt```
+in your shell to install all the python packages that are required.
+
+* Set up a GITHUB webhook by creating a pipeline that has GITHUB as the source and connect.  You will only need to set up the webhook once and then you can use it in your lambda_workflow.yml Cloudformation template.  Also, remember the OAuthToken from this process and save it in SecretsManager.
+
+* Modify the params.json file and tags.json file to include tags and parameters that are meaningful to you.  In particular, change the email address parameter in the params.json to be your email so that SNS messages related to the delivery pipeline will be emailed to you.
+
+### CI/CD Workflow
+
+The workflow starts with local testing so it is suggested that you use SAM Local so you can do most of your lambda testing locally.  To get started with SAM Local, view the instructions here:
+
+Once you have SAM local installed, you can run the following commands to run the server
 
 ```
 Give examples
@@ -61,6 +75,10 @@ Give an example
 ```
 
 ## Deployment
+
+Add additional notes about how to deploy this on a live system
+
+## CleanUp
 
 Add additional notes about how to deploy this on a live system
 
