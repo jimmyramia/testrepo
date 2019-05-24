@@ -1,9 +1,11 @@
+
+[<img src="https://files.realpython.com/media/aws-lambda-api-gateway-python-logos.a12cf4dc33bf.png">](https://files.realpython.com)
 # Mini-Project: Automation For The People!
 
 This mini-project is an application that exposes a Rest Endpoint which returns a JSON payload displaying a generic message and current time. It includes source code, infrastructure (IaC) code and unit tests.  Push your code to the master branch of this repo and it will trigger the build, test, manual approval, and deployment of your endpoint.  After successful deployment, the endpoint is accessible via the API gateway Invoke URL.  You can perform 2 actions, a GET on the URL which will display a generic message or a POST which returns a response echoing the message you posted in the body of your POST request.  
 
 The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is a mostly AWS solution except that GitHub was used instead of CodeCommit.  The AWS managed services include:
-* **Lambda** to process the requests events via **API Gateway**
+* **Lambda** to process the requests made available through **API Gateway**
 * **CodePipeline** to manage getting the code through all the steps and stages on its way to deployment (including webhook)
 * **Secrets Manager** to manage the GitHub secret used in the webhook (and referenced in the CloudFormation template)
 * **CodeBuild** to run the unit tests and package the Lambda in an **S3** bucket
