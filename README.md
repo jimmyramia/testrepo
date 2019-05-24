@@ -46,13 +46,27 @@ python -m unittest discover
 
 ### Single Command deployment of your Lambda when you are ready
 
-Run the following command to create your stack and kick off your the CodePipeline which will run your unit tests, package, and deploy your lambda:
-
+Run the following command to create your stack:
 ```
 make create
 ```
 
-## CleanUp
+### Code Pipeline
+The make command (and pushing code to your master branch) will kick off your the CodePipeline which will:
+* run your unit tests
+* package your lambda
+* prompt for manual approval to deploy
+* deploy your lambda
+
+### Accessing the live Endpoint
+To access your endpoint, find the InvokeURL by going to Amazon Apigateway>Stages.  You can perform a get by simply clicking on the InvokeURL.  To echo a custom message, you will need to post a message in the following format to the InvokeURL:
+```
+{
+  "message": "Your custom message here"
+}
+```
+
+### CleanUp
 
 Run the following command to clean up after yourself and remove all of the resources you created in AWS before you are charged extra.
 ```
