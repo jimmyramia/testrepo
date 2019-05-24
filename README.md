@@ -16,7 +16,7 @@ These instructions guide you through the prerequisites steps and the recommended
 
 ### Prerequisites
 
-* Install SAM Local - https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/
+* Recommended Install SAM Local for faster feedback loop enabling you to test your lambda locally before deploying - https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/
 
 * cd to the directory where requirements.txt is located, activate your virtualenv, and run:
 ```pip install -r requirements.txt```
@@ -26,88 +26,36 @@ in your shell to install all the python packages that are required.
 
 * Modify the params.json file and tags.json file to include tags and parameters that are meaningful to you.  In particular, change the email address parameter in the params.json to be your email so that SNS messages related to the delivery pipeline will be emailed to you.
 
-### CI/CD Workflow
+### Testing Locally
 
-The workflow starts with local testing so it is suggested that you use SAM Local so you can do most of your lambda testing locally.  To get started with SAM Local, view the instructions here:
+Test as much as of your code as you can locally before committing and pushing your code to master where it will kick off the pipeline using a GITHUB webhook.
 
-Once you have SAM local installed, you can run the following commands to run the server
-
+The following commands can be used to validate your SAM template and test your lambda locally with the help of SAM Local:
 ```
-Give examples
+sam validate
+sam local start-api
+curl -X GET http://127.0.0.1:3000/
+curl -d '{"message": "Hello"}' -X POST http://127.0.0.1:3000/
+echo '{"httpMethod": "GET"}' |sam local invoke "MessageProcessor"
+echo '{"httpMethod": "POST", "body": "{\"message\": \"GREAT\"}"}' |sam local invoke "MessageProcessor"
 ```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+The following commands can be used to run your unit tests locally:
 ```
-Give the example
+python -m unittest discover
 ```
 
-And repeat
+### Single Command deployment of your Lambda when you are ready
+
+Run the following command to create your stack and kick off your the CodePipeline which will run your unit tests, package, and deploy your lambda:
 
 ```
-until finished
+make create
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## CleanUp
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Run the following command to clean up after yourself and remove all of the resources you created in AWS before you are charged extra.
+```
+make delete
+```
+The command will empty the contents of the s3 bucket so that your stack can successfully delete.  It also delets the SAM stack.
