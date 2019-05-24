@@ -6,6 +6,9 @@ curl -d '{"message": "Hello"}' -X POST http://127.0.0.1:3000/
 echo '{"httpMethod": "GET"}' |sam local invoke "MessageProcessor"
 echo '{"httpMethod": "POST", "body": "{\"message\": \"GREAT\"}"}' |sam local invoke "MessageProcessor"
 
+run tests:
+python -m unittest discover
+
 codebuild:
 
 aws cloudformation package --template-file template.yml --s3-bucket mysandbox-ramiaj-lambdabucket --output-template-file packaged.yml

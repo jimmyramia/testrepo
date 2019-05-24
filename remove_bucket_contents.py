@@ -1,6 +1,8 @@
+'''
+Delete contents of s3 bucket (so that delete-stack call will work)
+'''
 import boto3, sys
 
-#They call using python boto3_s3_delete_folder.py <foldername>.  Check to make sure they passed the argument
 if len(sys.argv) == 1:
     print ("must pass the bucketname you want to delete contents from")
     sys.exit()
