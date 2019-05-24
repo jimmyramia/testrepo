@@ -30,5 +30,5 @@
   {
     "ParameterKey": "OAuthSecretKeyName",
     "ParameterValue": "github_oauth"
-  },
+  }
 ]

@@ -25,6 +25,7 @@ Parameters:
     Type: String
   OAuthSecretKeyName:
     Description: Name of the OAuth Secret Key
+    Type: String
 Resources:
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
