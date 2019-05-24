@@ -1,8 +1,8 @@
-# Mini-Project: An application that exposes a Rest Endpoint which returns a JSON payload displaying a generic message and current time.  
+# Mini-Project: Automation For The People!
 
-This mini-project includes source code, infrastructure (IaC) code and unit tests.  Simply push your code to the master branch of this repo and it will trigger the build, test, manual approval, and deployment of your endpoint.  After successful deployment, the endpoint is accessible via the API gateway Invoke URL.  You can perform 2 actions, a GET on the URL which will display a generic message or a POST to the invoke URL which will echo the message you posted in the body of your request.  
+This mini-project is an application that exposes a Rest Endpoint which returns a JSON payload displaying a generic message and current time. It includes source code, infrastructure (IaC) code and unit tests.  Push your code to the master branch of this repo and it will trigger the build, test, manual approval, and deployment of your endpoint.  After successful deployment, the endpoint is accessible via the API gateway Invoke URL.  You can perform 2 actions, a GET on the URL which will display a generic message or a POST which returns a response echoing the message you posted in the body of your POST request.  
 
-The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is a 100% AWS solution including:
+The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is an all AWS solution except that GitHub was used instead of CodeCommit.  The AWS managed services used include:
 * **Lambda** to process the requests made via **API Gateway**
 * **CodePipeline** to manage getting the code through all the steps and stages on its way to deployment (including webhook)
 * **Secrets Manager** to manage the GitHub secret used in the webhook (and referenced in the CloudFormation template)

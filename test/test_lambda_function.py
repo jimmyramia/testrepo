@@ -26,8 +26,8 @@ class MyTestCase(unittest.TestCase):
         '''
         Test get request returns the text we expect
         '''
-        response = json.loads(lambda_function.get())
-        message = response['message']
+        response = lambda_function.get()
+        message = json.loads(response['body'])['message']
         self.assertEqual(message, 'Automation For The People')
 
     def test_lambda_post(self):
@@ -36,8 +36,8 @@ class MyTestCase(unittest.TestCase):
         '''
         test_message = 'this is a test'
         request = construct_post_request(test_message)
-        response = json.loads(lambda_function.post(request))
-        message = response['message']
+        response = lambda_function.post(request)
+        message = json.loads(response['body'])['message']
         self.assertEqual(message, test_message)
 
     def test_lambda_post_no_message(self):
