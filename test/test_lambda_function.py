@@ -24,7 +24,7 @@ def construct_bad_post_request():
 class MyTestCase(unittest.TestCase):
     def test_lambda_get(self):
         '''
-        Test get request
+        Test get request returns the text we expect
         '''
         response = lambda_function.get()
         message = response['message']
@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_lambda_post(self):
         '''
-        Test post request passing a message that will just get echoed in the response
+        Test that response of post request contains message we pass in our request
         '''
         test_message = 'this is a test'
         request = construct_post_request(test_message)
@@ -42,7 +42,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_lambda_post_no_message(self):
         '''
-        Test post request passing no message and ensure that the response is a 400 error
+        Test post request passing no message and verify that the response is a 400 error
         '''
         request = construct_bad_post_request()
         response = lambda_function.post(request)
