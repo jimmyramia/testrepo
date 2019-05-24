@@ -1,5 +1,5 @@
 '''
-REST endpoint lambda code for displaying generic message or echoing a custom message (triggered from API gateway)
+REST endpoint lambda code for displaying generic message or echoing a custom message
 '''
 import os
 import json
@@ -7,7 +7,7 @@ import datetime
 
 def lambda_handler(event, context):
     '''
-    Lambda handles GET and POST requests on / (base URL)
+    Lambda handles GET and POST requests for /
     '''
     if event['httpMethod'] == 'GET':
         return get()
@@ -22,14 +22,14 @@ def lambda_handler(event, context):
 
 def get():
     '''
-    Processes GET on / and returns generic message plus time
+    Returns generic message plus time
     '''
     today = datetime.datetime.today()
     return {"message": 'Automation For The People', "timestamp": today.strftime('%m/%d/%Y:%H:%M:%S')}
 
 def post(request_body):
     '''
-    Processes POST on / and echos the message you sent in the body of the POST request
+    Echos the message you sent in the body of the request in the response
     '''
     today = datetime.datetime.today()
     if 'message' not in request_body:
