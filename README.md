@@ -14,11 +14,11 @@ The source code was developed with Python and the IaC was defined in Cloudformat
 
 ## Getting Started
 
-These instructions guide you through the prerequisites steps and the recommended workflow for getting your endpoint up and running on AWS.
+These instructions guide you through the prerequisite steps and the recommended workflow for getting your endpoint up and running on AWS.
 
 ### Prerequisites
 
-* Recommended Install SAM Local for faster feedback loop enabling you to test your lambda locally before deploying - https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/
+* It is recommend that you install SAM Local for faster feedback loop enabling you to test your lambda locally before deploying - https://aws.amazon.com/blogs/aws/new-aws-sam-local-beta-build-and-test-serverless-applications-locally/
 
 * cd to the directory where requirements.txt is located, activate your virtualenv, and run:
 ```pip install -r requirements.txt```
