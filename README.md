@@ -30,6 +30,8 @@ in your shell to install all the python packages that are required.
 
 ### Testing Locally
 
+[<img src="https://github.com/awslabs/serverless-application-model/blob/master/aws_sam_introduction.png?raw=true">](https://github.com/)
+
 Test as much as of your code as you can locally before committing and pushing your code to master where it will kick off the pipeline using a GITHUB webhook.
 
 The following commands can be used to validate your SAM template and test your lambda locally with the help of SAM Local:
