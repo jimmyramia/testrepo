@@ -2,7 +2,13 @@
 
 This mini-project includes source code, infrastructure (IaC) code and unit tests.  Simply push your code to the master branch of this repo and it will trigger the build, test, manual approval, and deployment of your endpoint.  After successful deployment, the endpoint is accessible via the API gateway Invoke URL.  You can perform 2 actions, a GET on the URL which will display a generic message or a POST to the invoke URL which will echo the message you posted in the body of your request.  
 
-The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is a 100% AWS solution including using Lambda to process the requests made via API gateway, CodePipeline to manage getting the code through all the steps and stages on its way to deployment, CodeBuild to run the unit tests and package the Lambda in an S3 bucket, SNS to send a notification when the manual approval is needed in the pipeline, and IaM to create all of the roles necessary in the pipeline.
+The source code was developed with Python and the IaC was defined in Cloudformation and Serverless Application Model (SAM).  This is a 100% AWS solution including:
+* **Lambda** to process the requests made via **API Gateway**
+* **CodePipeline** to manage getting the code through all the steps and stages on its way to deployment (including webhook)
+* **Secrets Manager** to manage the GitHub secret used in the webhook (and referenced in the CloudFormation template)
+* **CodeBuild** to run the unit tests and package the Lambda in an **S3** bucket
+* **SNS** to send a notification when the manual approval is needed in the pipeline
+* **IaM** to create all of the roles necessary in the pipeline.  
 
 ## Getting Started
 

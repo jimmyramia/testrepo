@@ -25,7 +25,7 @@ def get():
     Returns generic message plus time
     '''
     today = datetime.datetime.today()
-    return {"message": 'Automation For The People', "timestamp": today.strftime('%m/%d/%Y:%H:%M:%S')}
+    return json.dumps({"message": 'Automation For The People', "timestamp": today.strftime('%m/%d/%Y:%H:%M:%S')})
 
 def post(request_body):
     '''
@@ -34,4 +34,4 @@ def post(request_body):
     today = datetime.datetime.today()
     if 'message' not in request_body:
         return {'statusCode': 400, 'body': 'missing message in request body'}
-    return {"message": request_body['message'], "timestamp": today.strftime('%m/%d/%Y:%H:%M:%S')}
+    return json.dumps({"message": request_body['message'], "timestamp": today.strftime('%m/%d/%Y:%H:%M:%S')})

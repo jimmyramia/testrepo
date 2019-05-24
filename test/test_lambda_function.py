@@ -26,7 +26,7 @@ class MyTestCase(unittest.TestCase):
         '''
         Test get request returns the text we expect
         '''
-        response = lambda_function.get()
+        response = json.loads(lambda_function.get())
         message = response['message']
         self.assertEqual(message, 'Automation For The People')
 
@@ -36,7 +36,7 @@ class MyTestCase(unittest.TestCase):
         '''
         test_message = 'this is a test'
         request = construct_post_request(test_message)
-        response = lambda_function.post(request)
+        response = json.loads(lambda_function.post(request))
         message = response['message']
         self.assertEqual(message, test_message)
 
