@@ -25,7 +25,7 @@ def get():
     Returns generic message plus time
     '''
     today = datetime.datetime.today()
-    return {'statusCode': 200, 'body': json.dumps({'message': 'Automation For The People', 'timestamp': today.strftime('%m/%d/%Y:%H:%M:%S')})}
+    return {'statusCode': 200, 'body': json.dumps({'message': 'Automation For The Peoples', 'timestamp': today.strftime('%m/%d/%Y:%H:%M:%S')})}
 
 def post(request_body):
     '''
